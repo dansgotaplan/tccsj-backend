@@ -73,5 +73,7 @@ CREATE TABLE usuario(
     cod int primary key auto_increment,
     email varchar(255) unique not null,
     senha varchar(255) not null,
-    nivel_de_acesso varchar(255) not null
+    nivel_de_acesso varchar(10) not null
 )
+
+INSERT INTO usuario(email, senha, nivel_de_acesso) VALUES ("kauayssa@gmail.com", "amotaroba", "admin")
