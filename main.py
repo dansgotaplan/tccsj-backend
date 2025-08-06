@@ -3,9 +3,9 @@ import mysql.connector
 
 app = Flask(__name__)
 cnx = mysql.connector.connect(
-    host="localhost",
+    host="127.0.0.1",
     user="root",
-    password="senha", #!!! colocar senha dps de acordo com o MySQL Workbench
+    password="aluno", #!!! colocar senha dps de acordo com o MySQL Workbench
     database="tccsjdb"
 )
 
@@ -13,10 +13,10 @@ cnx = mysql.connector.connect(
 def homepage ():
     return "API está funcionando, você está na homepage"
 
-@app.route("/admin/r-eventos")
+@app.route("/admin/r-eventos", methods=['GET'])
 def lertudo():
     cursor = cnx.cursor()
-    cursor.execute('SELECT cod, descricao, endereco, latitude, longitude, resumo, data_inicio, data_encerramento FROM evento')
+    cursor.execute('SELECT * FROM evento')
     rows = cursor.fetchall()
     cursor.close()
     eventos = []
@@ -31,7 +31,8 @@ def lertudo():
             'data_inicio': row[6],
             'data_encerramento': row[7]
         })
-    return make_response(jsonify (eventos))
+    #return make_response(jsonify (eventos))
+    return make_response(eventos)
 
 #@app.route("/admin/create")
 
