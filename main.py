@@ -2,7 +2,7 @@ from flask import Flask, make_response, jsonify, request
 import mysql.connector
 
 app = Flask(__name__)
-conexao = mysql.connector.connect(
+cnx = mysql.connector.connect(
     host="localhost",
     user="root",
     password="senha", #!!! colocar senha dps de acordo com o MySQL Workbench
@@ -11,11 +11,11 @@ conexao = mysql.connector.connect(
 
 @app.route("/admin") #homepage do adm
 def homepage ():
-    print("API está funcionando, você está na homepage")
+    return "API está funcionando, você está na homepage"
 
 @app.route("/admin/r-eventos")
 def lertudo():
-    cursor = conexao.cursor
+    cursor = cnx.cursor()
     cursor.execute('SELECT cod, descricao, endereco, latitude, longitude, resumo, data_inicio, data_encerramento FROM evento')
     rows = cursor.fetchall()
     cursor.close()
@@ -29,14 +29,9 @@ def lertudo():
             'longitude': row[4],
             'resumo': row[5],
             'data_inicio': row[6],
-            'daya_encerramento': row[7]
+            'data_encerramento': row[7]
         })
-    return make_response(
-        jsonify (
-            eventos
-        )
-    )
-
+    return make_response(jsonify (eventos))
 
 #@app.route("/admin/create")
 
