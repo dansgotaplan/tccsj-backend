@@ -9,7 +9,7 @@ cnx = mysql.connector.connect(
     database="tccsjdb"
 )
 
-@app.route("/admin") #homepage do adm
+@app.route("/admin")
 def homepage ():
     return "API está funcionando, você está na homepage"
 
