@@ -5,6 +5,7 @@
 # 4. LOCAIS DE INTERESSE
 # 5. COMIDAS
 # 6. HOMENAGEADOS
+# 7. USUÁRIOS
 
 # IMPORTANTE: Manter a ordem correta para manter a clareza e organização do código.
 
@@ -21,7 +22,8 @@ cnx = mysql.connector.connect(
     database="tccsjdb"
 )
 
-#----- LEITURA (GET) -----
+#----- Primeira Camada -----
+
 @app.route("/")
 def homepage():
     return "API está funcionando, você está na homepage"
@@ -30,7 +32,9 @@ def homepage():
 def admin_home():
     return "Você está na página homepage de administração"
 
-@app.route("admin/eventos", methods=['GET'])
+#----- Segunda Camada (/admin/*****) -----
+
+@app.route("/admin/eventos", methods=['GET'])
 def listar_eventos():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM evento')
@@ -106,7 +110,7 @@ def listar_locais_interesse():
         })
     return make_response(jsonify(locais))
 
-@app.route("admin/comidas", methods=['GET'])
+@app.route("/admin/comidas", methods=['GET'])
 def listar_homenageados():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM comidas')
@@ -126,7 +130,7 @@ def listar_homenageados():
         })
     return make_response(jsonify(comidas))
 
-@app.route("admin/homenageados", methods=['GET'])
+@app.route("/admin/homenageados", methods=['GET'])
 def listar_homenageados():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM homenageados')
@@ -143,10 +147,31 @@ def listar_homenageados():
         })
     return make_response(jsonify(homenageados))
 
-@app.route("/admin/eventos/")
+@app.route("/admin/usuarios", methods=['GET'])
+def listar_usuarios():
+    cursor = cnx.cursor()
+    cursor.execute('SELECT * FROM usuario')
+    rows = cursor.fetchall()
+    cursor.close()
+    usuarios = []
+    for row in rows:
+        usuarios.append({
+            'cod': row[0],
+            'email': row[1],
+            'senha': row[2],
+            'nivel_de_acesso': row[3]
+        })
+    return make_response(jsonify(usuarios))
 
-#----- EDIÇÃO (POST) -----
+#----- Terceira Camada por CODIGO -----
 
+#----- Terceira Camada por ?PARAM -----
+
+#----- Terceira Camada por CREATE -----
+
+@app.route("/admin/eventos/new")
+def vazio():
+    return 'vazio, por enquanto'
 #-------------------------
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
