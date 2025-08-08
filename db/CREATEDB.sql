@@ -1,6 +1,6 @@
 USE tccsjdb;
 
-CREATE TABLE evento(
+CREATE TABLE evento( #Polo (EX: Pátio do Forró)
     cod int primary key auto_increment,
     descricao varchar(255) not null,
     endereco varchar(500),
@@ -11,7 +11,7 @@ CREATE TABLE evento(
     data_encerramento date not null
 );
 
-CREATE TABLE exibicao(
+CREATE TABLE exibicao( #Dia de Show (EX: um dia específico de um evento)
     cod int primary key auto_increment,
     fk_evento int,
     data_exibicao date not null,
@@ -20,7 +20,7 @@ CREATE TABLE exibicao(
     foreign key (fk_evento) references evento(cod)
 );
 
-CREATE TABLE atracao(
+CREATE TABLE atracao( #Artista ou Banda
     cod int primary key auto_increment,
     fk_exibicao int,
     nome varchar(500) not null,

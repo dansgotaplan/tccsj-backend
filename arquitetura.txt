@@ -1,0 +1,10 @@
+1º CAMADA
+/admin/eventos/
+	GET "SELECT * FROM eventos"
+		 INFORMA as opções de eventos 
+/admin/eventos/<int cod-eventos>/
+	GET "SELECT * FROM eventos WHERE cod = <cod-eventos> AND * SELECT FROM exibicoes WHERE fk_evento = <int cod-evento>"
+		>> INFORMA os dados do evento específico
+		>> INFORMA as opções de exibicoes daquele evento especifico
+/admin/eventos/new
+	POST    >> CRIA NOVO EVENTO
