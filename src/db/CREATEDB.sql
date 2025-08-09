@@ -8,7 +8,7 @@ CREATE TABLE evento( #Polo (EX: Pátio do Forró)
     longitude decimal not null,
     resumo text,
     data_inicio date not null,
-    data_encerramento date not null
+    data_fim date not null
 );
 
 CREATE TABLE exibicao( #Dia de Show (EX: um dia específico de um evento)
@@ -42,11 +42,18 @@ CREATE TABLE locais_de_interesse(
     horario_fim time not null
 );
 
-CREATE TABLE classificao_locais(
+CREATE TABLE locaistags(
+    fk_local int,
+    fk_tag int,
+    primary key (fk_local, fk_tag),
+    foreign key (fk_local) references locais_de_interesse(cod),
+    foreign key (fk_tag) references tags(cod)
+)
+
+CREATE TABLE tags(
     cod int primary key auto_increment,
-    fk_locais_de_interesse int,
+    nome varchar(255) not null,
     descricao varchar(255) not null,
-    foreign key fk_locais_de_interesse references locais_de_interesse(cod)
 );
 
 CREATE TABLE comidas(
