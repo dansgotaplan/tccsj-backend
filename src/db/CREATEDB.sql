@@ -53,7 +53,6 @@ CREATE TABLE locaistags(
 CREATE TABLE tags(
     cod int primary key auto_increment,
     nome varchar(255) not null,
-    descricao varchar(255) not null,
 );
 
 CREATE TABLE comidas(

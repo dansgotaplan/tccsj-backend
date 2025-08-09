@@ -153,7 +153,6 @@ def listar_locais_cod():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local))
     rows = cursor.fetchall()
-    cursor.close()
     locais = []
     for row in rows:
         locais.append({
@@ -169,6 +168,17 @@ def listar_locais_cod():
             'horario_inicio': row[9],
             'horario_fim': row[10]
         })
+    cursor.execute('SELECT fk_tag FROM locaistags WHERE cod = %s', (cod_local))
+    rows = cursor.fetchall()
+    tagslocal = {}
+    for row in rows:
+        cursor.execute('SELECT nome FROM tags WHERE cod = %s', (fk_tag))
+        tag = cursor.fetchall()
+        tagslocal.append(tag)
+    cursor.close()
+    locais.append({
+        'tags': locaistags
+    })
     return make_response(jsonify(locais))
 
 @app.route("/admin/tags", methods=['GET'])
