@@ -12,15 +12,15 @@ cnx = mysql.connector.connect(
 @app.route('/admin/locais-de-interesse/<int cod_local>', methods=['GET'])
 def listar_locais_cod(cod_local):
     cursor = cnx.cursor()
-    cursor.execute('SELECT fk_tags FROM locaistags WHERE fl_locais = ', (cod_local,))
+    cursor.execute('SELECT fk_tags FROM locaistags WHERE fl_locais = %s', (cod_local,))
     chaves = cursor.fetchall()
     tags = []
     for chave in chaves:
-        cursor.execute('SELECT nome FROM tags WHERE cod = ', (chave,))
+        cursor.execute('SELECT nome FROM tags WHERE cod = %s', (chave[0]))
         nomes = cursor.fetchall()
         for nome in nomes:
-            tags.append(nome)
-    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = ', (cod_local,))
+            tags.append(nome[0])
+    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local,))
     locais = []
     rows = cursor.fetchall()
     cursor.close()
@@ -31,7 +31,7 @@ def listar_locais_cod(cod_local):
             'resumo': row[2],
             'endereco': row[3],
             'latitude': row[4],
-            'longitude': row[5]
+            'longitude': row[5],
             'link_imagem': row[6],
             'dias_funcionamento': row[7],
             'icone': row[8],
