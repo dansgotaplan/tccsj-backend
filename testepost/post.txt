@@ -1,0 +1,66 @@
+COMANDO #1 - Requisição POST completa
+
+[
+    {
+        "nome": "Patio do Forro",
+        "endereco": "Rua Agnelo Dias Vidal, S/N - Bairro Nossa Senhora das Dores, Caruaru - PE, 55002-310.",
+        "latitude": -8,28277,
+        "longitude": -35,97583,
+        "resumo": "Não encontrado",
+        "data_inicio": "2025-05-31",
+        "data_fim": "2025-06-28"
+    }
+]
+
+RESULTADO ESPERADO
+[
+    {
+        "status": "POST SUCCESS",
+        "nome": "Pátio do Forró",
+        "endereco": "
+    }
+]
+
+----------
+
+COMANDO #2 - Requisição POST incompleta não-proibitiva
+
+[
+    {
+        "nome": "Praça da Criança",
+        "latitude": -8.2829,
+        "longitude": -35.9758,
+        "data_inicio": "2025-05-31",
+        "data_fim": "2025-06-28"
+    }
+]
+
+RESULTADO ESPERADO:
+[
+    {
+        "status": "POST SUCCESS",
+        "nome": "Praça da Criança",
+        "latitude": -8.2829,
+        "longitude": -35.9758,
+        "data_inicio": "2025-05-31",
+        "data_fim": "2025-06-28"
+    }
+]
+
+----------
+
+COMANDO #3 - Requisição POST incompleta proibitiva
+
+[
+    {
+        "nome": "Alto do Moura"
+    }
+]
+
+RESULTADO ESPERADO:
+[
+    {
+        "status": "POST FAIL",
+        "note": "latitude cannot be null"
+    }
+]

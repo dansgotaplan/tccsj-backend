@@ -28,37 +28,23 @@ def admin_home():
 @app.route("/admin/eventos", methods=['GET', 'POST'])
 def listar_eventos():
     cursor = cnx.cursor()
-    if request.method == 'POST':
-        data = request.get_json()
-        descricao = data[descricao]
-        endereco = [endereco]
-        latitude = [latitude]
-        longitude = [longitude]
-        resumo = [resumo]
-        data_inicio = [data_inicio]
-        data_fim = [data_fim]
-        cursor.execute('INSERT INTO evento(descricao, endereco, latitude, logitude, resumo, data_inicio, data_fim) VALUES (%s, %s, %5f, %5f, %s, %s, %s)', (descricao, endereco, latitude, longitude, resumo, data_inicio, data_fim))
-        cursor.commit()
-        cursor.close()
-        return jsonify({'status:': 'Inserted', 'descricao': descricao, 'endereco': endereco, 'latitude': latitude, 'longitude': longitude, 'resumo': resumo, 'data_inicio': data_inicio, 'data_fim': data_fim})
-    else:
-        cursor.execute('SELECT * FROM evento')
-        rows = cursor.fetchall()
-        cursor.close()
-        results = []
-        for row in rows:
-            results.append({
-                'cod': row[0],
-                'descricao': row[1],
-                'endereco': row[2],
-                'latitude': row[3],
-                'longitude': row[4],
-                'resumo': row[5],
-                'data_inicio': row[6],
-                'data_fim': row[7]
-            })
-        sevazio(results)
-        return make_response(jsonify(results))
+    cursor.execute('SELECT * FROM evento')
+    rows = cursor.fetchall()
+    cursor.close()
+    results = []
+    for row in rows:
+        results.append({
+            'cod': row[0],
+            'descricao': row[1],
+            'endereco': row[2],
+            'latitude': row[3],
+            'longitude': row[4],
+            'resumo': row[5],
+            'data_inicio': row[6],
+            'data_fim': row[7]
+        })
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/eventos/<int:i>", methods=['GET'])
 def listar_eventos_cod(i):
