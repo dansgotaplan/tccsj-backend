@@ -43,7 +43,7 @@ def listar_eventos():
         })
     return make_response(jsonify(eventos))
 
-@app.route("/admin/eventos/<int cod_evento>", methods=[GET])
+@app.route("/admin/eventos/<int:cod_evento>", methods=[GET])
 def listar_eventos_cod(cod_evento):
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM evento WHERE cod = %s', (cod_evento))
@@ -76,7 +76,7 @@ def listar_exibicoes():
         })
     return make_response(jsonify(exibicoes))
 
-@app.route("/admin/exibicoes/<int cod_exibicao>", methods=['GET'])
+@app.route("/admin/exibicoes/<int:cod_exibicao>", methods=['GET'])
 def listar_exibicoes_cod(cod_exibicao):
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM exibicao WHERE cod = %s', (cod_exibicao))
@@ -109,7 +109,7 @@ def listar_atracoes():
         })
     return make_response(jsonify(atracoes))
 
-@app.route("/admin/atracoes/<int cod_atracao>", methods=['GET'])
+@app.route("/admin/atracoes/<int:cod_atracao>", methods=['GET'])
 def listar_atracoes_cod(cod_atracao):
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM atracao WHERE cod = %s', (cod_atracao))
@@ -148,12 +148,21 @@ def listar_locais():
         })
     return make_response(jsonify(locais))
 
-@app.route("/admin/locais-de-interesse/<int cod_local>", methods=['GET'])
-def listar_locais_cod():
+@app.route("/admin/locais-de-interesse/<int:cod_local>", methods=['GET'])
+def listar_locais_cod(cod_local):
     cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local))
-    rows = cursor.fetchall()
+    cursor.execute('SELECT fk_tag FROM locaistags WHERE fk_local = %s', (cod_local,))
+    chaves = cursor.fetchall()
+    tags = []
+    for chave in chaves:
+        cursor.execute('SELECT nome FROM tags WHERE cod = %s', (chave[0]))
+        nomes = cursor.fetchall()
+        for nome in nomes:
+            tags.append(nome[0])
+    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local,))
     locais = []
+    rows = cursor.fetchall()
+    cursor.close()
     for row in rows:
         locais.append({
             'cod': row[0],
@@ -166,19 +175,9 @@ def listar_locais_cod():
             'dias_funcionamento': row[7],
             'icone': row[8],
             'horario_inicio': row[9],
-            'horario_fim': row[10]
+            'horario_fim': row[10],
+            'tags': tags
         })
-    cursor.execute('SELECT fk_tag FROM locaistags WHERE cod = %s', (cod_local))
-    rows = cursor.fetchall()
-    tagslocal = {}
-    for row in rows:
-        cursor.execute('SELECT nome FROM tags WHERE cod = %s', (fk_tag))
-        tag = cursor.fetchall()
-        tagslocal.append(tag)
-    cursor.close()
-    locais.append({
-        'tags': locaistags
-    })
     return make_response(jsonify(locais))
 
 @app.route("/admin/tags", methods=['GET'])
