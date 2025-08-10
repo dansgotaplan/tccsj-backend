@@ -13,7 +13,9 @@ cnx = mysql.connector.connect(
     database="tccsjdb"
 )
 
-#----- Primeira Camada -----
+def sevazio(results):
+    if len(results) == 0:
+        return 'Nenhum resultado encontrado.'
 
 @app.route("/")
 def homepage():
@@ -29,9 +31,9 @@ def listar_eventos():
     cursor.execute('SELECT * FROM evento')
     rows = cursor.fetchall()
     cursor.close()
-    eventos = []
+    results = []
     for row in rows:
-        eventos.append({
+        results.append({
             'cod': row[0],
             'descricao': row[1],
             'endereco': row[2],
@@ -41,15 +43,16 @@ def listar_eventos():
             'data_inicio': row[6],
             'data_fim': row[7]
         })
-    return make_response(jsonify(eventos))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/eventos/<int:cod_evento>", methods=[GET])
 def listar_eventos_cod(cod_evento):
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM evento WHERE cod = %s', (cod_evento))
-    eventos = []
+    results = []
     for row in rows:
-        eventos.append({
+        results.append({
             'cod': row[0],
             'descricao': row[1],
             'endereco': row[2],
@@ -59,22 +62,24 @@ def listar_eventos_cod(cod_evento):
             'data_inicio': row[6],
             'data_fim': row[7]
         })
-    return make_response(jsonify(eventos))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/exibicoes", methods=['GET'])
 def listar_exibicoes():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM exibicao')
-    exibicoes = []
+    results = []
     for row in rows:
-        exibicoes.append({
+        results.append({
             'cod': row[0],
             'fk_evento': row[1],
             'data_exibicao': row[2],
             'horario': row[3],
             'sequencia': row[4]
         })
-    return make_response(jsonify(exibicoes))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/exibicoes/<int:cod_exibicao>", methods=['GET'])
 def listar_exibicoes_cod(cod_exibicao):
@@ -82,16 +87,17 @@ def listar_exibicoes_cod(cod_exibicao):
     cursor.execute('SELECT * FROM exibicao WHERE cod = %s', (cod_exibicao))
     rows = cursor.fetchall()
     cursor.close()
-    exibicoes = []
+    results = []
     for row in rows:
-        exibicoes.append({
+        results.append({
             'cod': row[0],
             'fk_evento': row[1],
             'data_exibicao': row[2],
             'horario': row[3],
             'sequencia': row[4]
         })
-    return make_response(jsonify(exibicoes))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/atracoes", methods=['GET'])
 def listar_atracoes():
@@ -99,15 +105,16 @@ def listar_atracoes():
     cursor.execute('SELECT * FROM atracao')
     rows = cursor.fetchall()
     cursor.close()
-    atracoes = []
+    results = []
     for row in rows:
-        atracoes.append({
+        results.append({
             'cod': row[0],
             'fk_exibicao': row[1],
             'nome': row[2],
             'principal': row[3]
         })
-    return make_response(jsonify(atracoes))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/atracoes/<int:cod_atracao>", methods=['GET'])
 def listar_atracoes_cod(cod_atracao):
@@ -115,15 +122,16 @@ def listar_atracoes_cod(cod_atracao):
     cursor.execute('SELECT * FROM atracao WHERE cod = %s', (cod_atracao))
     rows = cursor.fetchall()
     cursor.close
-    atracoes = []
+    results = []
     for row in rows:
-        atracoes.append({
+        results.append({
             'cod': row[0],
             'fk_exibicao': row[1],
             'nome': row[2],
             'principal': row[3]
         })
-    return make_response(jsonify(atracoes))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/locais-de-interesse", methods=['GET'])
 def listar_locais():
@@ -131,9 +139,9 @@ def listar_locais():
     cursor.execute('SELECT * FROM locais_de_interesse')
     rows = cursor.fetchall()
     cursor.close()
-    locais = []
+    results = []
     for row in rows:
-        locais.append({
+        results.append({
             'cod': row[0],
             'descricao': row[1],
             'resumo': row[2],
@@ -146,7 +154,8 @@ def listar_locais():
             'horario_inicio': row[9],
             'horario_fim': row[10]
         })
-    return make_response(jsonify(locais))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/locais-de-interesse/<int:cod_local>", methods=['GET'])
 def listar_locais_cod(cod_local):
@@ -160,11 +169,11 @@ def listar_locais_cod(cod_local):
         for nome in nomes:
             tags.append(nome[0])
     cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local,))
-    locais = []
+    results = []
     rows = cursor.fetchall()
     cursor.close()
     for row in rows:
-        locais.append({
+        results.append({
             'cod': row[0],
             'descricao': row[1],
             'resumo': row[2],
@@ -178,7 +187,8 @@ def listar_locais_cod(cod_local):
             'horario_fim': row[10],
             'tags': tags
         })
-    return make_response(jsonify(locais))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/tags", methods=['GET'])
 def listar_tags():
@@ -186,14 +196,15 @@ def listar_tags():
     cursor.execute('SELECT * FROM tags')
     rows = cursor.fetchall()
     cursor.close()
-    tags = []
+    results = []
     for row in rows:
-        tags.append({
+        results.append({
             'cod': row[0],
             'nome': row[1],
             'descricao': row[2]
         })
-    return make_response(jsonify(locais))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/comidas", methods=['GET'])
 def listar_comidas():
@@ -201,9 +212,9 @@ def listar_comidas():
     cursor.execute('SELECT * FROM comidas')
     rows = cursor.fetchall()
     cursor.close()
-    comidas = []
+    results = []
     for row in rows:
-        comidas.append({
+        results.append({
             'cod': row[0],
             'descricao': row[1],
             'data_comida': row[2],
@@ -213,7 +224,8 @@ def listar_comidas():
             'longitude': row[6],
             'resumo': row[7],
         })
-    return make_response(jsonify(comidas))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/homenageados", methods=['GET'])
 def listar_homenageados():
@@ -221,16 +233,17 @@ def listar_homenageados():
     cursor.execute('SELECT * FROM homenageados')
     rows = cursor.fetchall()
     cursor.close()
-    homenageados = []
+    results = []
     for row in rows:
-        homenageados.append({
+        results.append({
             'cod': row[0],
             'ano': row[1],
             'obras': row[2],
             'nome': row[3],
             'descricao': row[4]
         })
-    return make_response(jsonify(homenageados))
+    sevazio(results)
+    return make_response(jsonify(results))
 
 @app.route("/admin/usuarios", methods=['GET'])
 def listar_usuarios():
@@ -238,19 +251,17 @@ def listar_usuarios():
     cursor.execute('SELECT * FROM usuario')
     rows = cursor.fetchall()
     cursor.close()
-    usuarios = []
+    results = []
     for row in rows:
-        usuarios.append({
+        results.append({
             'cod': row[0],
             'email': row[1],
             'senha': row[2],
             'nivel_de_acesso': row[3]
         })
-    return make_response(jsonify(usuarios))
+    sevazio(results)
+    return make_response(jsonify(results))
 
-@app.route("/admin/eventos/new")
-def vazio():
-    return 'vazio, por enquanto'
 #-------------------------
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
