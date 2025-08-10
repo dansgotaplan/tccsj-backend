@@ -25,7 +25,7 @@ def homepage():
 def admin_home():
     return "Você está na página homepage de administração"
 
-@app.route("/admin/eventos", methods=['GET'])
+@app.route("/admin/eventos", methods=['GET', 'POST'])
 def listar_eventos():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM evento')
@@ -46,10 +46,10 @@ def listar_eventos():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/eventos/<int:cod_evento>", methods=[GET])
-def listar_eventos_cod(cod_evento):
+@app.route("/admin/eventos/<int:i>", methods=['GET'])
+def listar_eventos_cod(i):
     cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM evento WHERE cod = %s', (cod_evento))
+    cursor.execute('SELECT * FROM evento WHERE cod = %s', (i,))
     results = []
     for row in rows:
         results.append({
@@ -65,7 +65,7 @@ def listar_eventos_cod(cod_evento):
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/exibicoes", methods=['GET'])
+@app.route("/admin/exibicoes", methods=['GET', 'POST'])
 def listar_exibicoes():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM exibicao')
@@ -81,10 +81,10 @@ def listar_exibicoes():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/exibicoes/<int:cod_exibicao>", methods=['GET'])
-def listar_exibicoes_cod(cod_exibicao):
+@app.route("/admin/exibicoes/<int:i>", methods=['GET'])
+def listar_exibicoes_cod(i):
     cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM exibicao WHERE cod = %s', (cod_exibicao))
+    cursor.execute('SELECT * FROM exibicao WHERE cod = %s', (i,))
     rows = cursor.fetchall()
     cursor.close()
     results = []
@@ -99,7 +99,7 @@ def listar_exibicoes_cod(cod_exibicao):
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/atracoes", methods=['GET'])
+@app.route("/admin/atracoes", methods=['GET', 'POST'])
 def listar_atracoes():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM atracao')
@@ -116,10 +116,10 @@ def listar_atracoes():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/atracoes/<int:cod_atracao>", methods=['GET'])
-def listar_atracoes_cod(cod_atracao):
+@app.route("/admin/atracoes/<int:i>", methods=['GET'])
+def listar_atracoes_cod(i):
     cursor = cnx.cursor()
-    cursor.execute('SELECT * FROM atracao WHERE cod = %s', (cod_atracao))
+    cursor.execute('SELECT * FROM atracao WHERE cod = %s', (i,))
     rows = cursor.fetchall()
     cursor.close
     results = []
@@ -133,7 +133,7 @@ def listar_atracoes_cod(cod_atracao):
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/locais-de-interesse", methods=['GET'])
+@app.route("/admin/locais-de-interesse", methods=['GET', 'POST'])
 def listar_locais():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM locais_de_interesse')
@@ -157,10 +157,10 @@ def listar_locais():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/locais-de-interesse/<int:cod_local>", methods=['GET'])
-def listar_locais_cod(cod_local):
+@app.route("/admin/locais-de-interesse/<int:i>", methods=['GET'])
+def listar_locais_cod(i):
     cursor = cnx.cursor()
-    cursor.execute('SELECT fk_tag FROM locaistags WHERE fk_local = %s', (cod_local,))
+    cursor.execute('SELECT fk_tag FROM locaistags WHERE fk_local = %s', (i,))
     chaves = cursor.fetchall()
     tags = []
     for chave in chaves:
@@ -168,7 +168,7 @@ def listar_locais_cod(cod_local):
         nomes = cursor.fetchall()
         for nome in nomes:
             tags.append(nome[0])
-    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (cod_local,))
+    cursor.execute('SELECT * FROM locais_de_interesse WHERE cod = %s', (i,))
     results = []
     rows = cursor.fetchall()
     cursor.close()
@@ -190,7 +190,7 @@ def listar_locais_cod(cod_local):
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/tags", methods=['GET'])
+@app.route("/admin/tags", methods=['GET', 'POST'])
 def listar_tags():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM tags')
@@ -206,7 +206,7 @@ def listar_tags():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/comidas", methods=['GET'])
+@app.route("/admin/comidas", methods=['GET', 'POST'])
 def listar_comidas():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM comidas')
@@ -227,7 +227,7 @@ def listar_comidas():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/homenageados", methods=['GET'])
+@app.route("/admin/homenageados", methods=['GET', 'POST'])
 def listar_homenageados():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM homenageados')
@@ -245,7 +245,7 @@ def listar_homenageados():
     sevazio(results)
     return make_response(jsonify(results))
 
-@app.route("/admin/usuarios", methods=['GET'])
+@app.route("/admin/usuarios", methods=['GET', 'POST'])
 def listar_usuarios():
     cursor = cnx.cursor()
     cursor.execute('SELECT * FROM usuario')
