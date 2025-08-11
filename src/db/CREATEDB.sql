@@ -2,7 +2,7 @@ USE tccsjdb;
 
 CREATE TABLE evento( #Polo (EX: Pátio do Forró)
     cod int primary key auto_increment,
-    descricao varchar(255) not null,
+    nome varchar(255) not null,
     endereco varchar(500),
     latitude decimal not null,
     longitude decimal not null,
@@ -30,7 +30,7 @@ CREATE TABLE atracao( #Artista ou Banda
 
 CREATE TABLE locais_de_interesse(
     cod int primary key auto_increment,
-    descricao varchar(255) not null,
+    nome varchar(255) not null,
     resumo text,
     endereco varchar(500),
     latitude decimal(10,8) not null,

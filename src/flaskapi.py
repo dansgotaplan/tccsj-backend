@@ -35,7 +35,7 @@ def listar_eventos():
     for row in rows:
         results.append({
             'cod': row[0],
-            'descricao': row[1],
+            'nome': row[1],
             'endereco': row[2],
             'latitude': row[3],
             'longitude': row[4],
@@ -54,7 +54,7 @@ def listar_eventos_cod(i):
     for row in rows:
         results.append({
             'cod': row[0],
-            'descricao': row[1],
+            'nome': row[1],
             'endereco': row[2],
             'latitude': row[3],
             'longitude': row[4],
