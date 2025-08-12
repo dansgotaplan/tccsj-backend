@@ -54,7 +54,7 @@ CREATE TABLE locais(
     latitude DECIMAL (10,8) NOT NULL,
     longitude DECIMAL (11,8) NOT NULL,
     urlimage TEXT NOT NULL,
-    urlicone VARCHAR(255),
+    urlicone VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tag(
@@ -70,12 +70,23 @@ CREATE TABLE locaistags(
     FOREIGN KEY (fktag) REFERENCES tag(cod)
 );
 
-CREATE TABLE homenageado(
+CREATE TABLE pessoatags(
+    fkpessoa INT,
+    fktag INT,
+    PRIMARY KEY (fkpessoa, fktag)
+    FOREIGN KEY (fkpessoa) REFERENCES pessoa(cod)
+    FOREIGN KEY (fktag) REFERENCES tag(cod)
+);
+
+CREATE TABLE pessoa(
     cod INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     obras VARCHAR(500) NOT NULL,
-    ano YEAR NOT NULL
+    nascido DATE NOT NULL,
+    morte DATE,
+    ishomenageado BOOLEAN NOT NULL,
+    anohomenagem DATE NOT NULL
 );
 
 CREATE TABLE usuario(
