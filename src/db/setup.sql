@@ -4,6 +4,7 @@ USE tccsj;
 DROP TABLE IF EXISTS evento;
 CREATE TABLE evento(
     cod INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     dia DATE NOT NULL,
@@ -17,13 +18,14 @@ CREATE TABLE evento(
 DROP TABLE IF EXISTS polo;
 CREATE TABLE polo(
     cod INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     inicio DATE NOT NULL,
     fim DATE NOT NULL,
-    endereco VARCHAR(500) NOT NULL,
-    latitude DECIMAL(8,5) NOT NULL,
-    longitude DECIMAL(8,5) NOT NULL
+    endereco VARCHAR(500),
+    latitude DECIMAL(8,5),
+    longitude DECIMAL(8,5)
 );
 
 -- Tabela de exibições em determinado polo
@@ -34,6 +36,9 @@ CREATE TABLE exibicao(
     fkpolo INT NOT NULL,
     dia DATE NOT NULL,
     horario TIME NOT NULL,
+    endereco VARCHAR(500),
+    latitude DECIMAL(8,5),
+    longitude DECIMAL(8,5),
     FOREIGN KEY (fkpolo) REFERENCES polo(cod)
 );
 
@@ -53,6 +58,7 @@ CREATE TABLE atracao(
 DROP TABLE IF EXISTS locais;
 CREATE TABLE locais(
     cod INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     dias VARCHAR(255),
@@ -69,6 +75,7 @@ CREATE TABLE locais(
 DROP TABLE IF EXISTS pessoa;
 CREATE TABLE pessoa(
     cod INT PRIMARY KEY AUTI_INCREMENT,
+    id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     obras VARCHAR(500) NOT NULL,
@@ -81,7 +88,8 @@ CREATE TABLE pessoa(
 -- Tabela de tags (Cultural, Comercio, etc)
 DROP TABLE IF EXISTS tag;
 CREATE TABLE tag(
-    cod VARCHAR(255) PRIMARY KEY AUTO_INCREMENT,
+    cod INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL
 );
 
@@ -95,7 +103,7 @@ CREATE TABLE locaistags(
     FOREIGN KEY (fktag) REFERENCES tag(cod)
 );
 
--- Relacionamento n para n de Pessoas e Tags
+-- Relacionamento n para n de Tags e Pessoas
 DROP TABLE IF EXISTS pessoatags;
 CREATE TABLE pessoatags(
     fkpessoa INT,
@@ -104,6 +112,16 @@ CREATE TABLE pessoatags(
     FOREIGN KEY (fkpessoa) REFERENCES pessoa(cod),
     FOREIGN KEY (fktag) REFERENCES tag(cod)
 );
+
+-- Relacionamento n para n de Atrações e Tags
+DROP TABLE IF EXISTS atracaotags;
+CREATE TABLE atracaotags(
+    fkatracao INT,
+    fktag INT,
+    PRIMARY KEY (fkatracao, fktag),
+    FOREIGN KEY (fkkatracao) REFERENCES atracao(cod),
+    FOREIGN KEY (fktag) REFERENCES tag(cod)
+)
 
 DROP TABLE IF EXISTS usuario;
 CREATE TABLE usuario(
