@@ -30,4 +30,6 @@ INSERT INTO locaistags(fk_local, fk_tag) VALUES (1,2);
 INSERT INTO locaistags(fk_local, fk_tag) VALUES (2,1);
 INSERT INTO locaistags(fk_local, fk_tag) VALUES (2,3);
 INSERT INTO locaistags(fk_local, fk_tag) VALUES (3,4);
-INSERT INTO locaistags(fk_local, fk_tag) VALUES (3,5);
+INSERT INTO locaistags(fk_local, fk_tag) VALUES (3,6);
+
+INSERT INTO comidas(descricao, data_comida, horario, latitude, longitude, resumo) VALUES ('Canji')
