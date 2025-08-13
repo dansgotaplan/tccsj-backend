@@ -10,8 +10,8 @@ CREATE TABLE evento(
     dia DATE NOT NULL,
     horario TIME NOT NULL,
     endereco VARCHAR(500) NOT NULL,
-    latitude DECIMAL NOT NULL,
-    longitude DECIMAL NOT NULL
+    latitude DECIMAL(8,5) NOT NULL,
+    longitude DECIMAL(8,5) NOT NULL
 );
 
 -- Tabela de Polos como Pátio do Forró, Azulão, SJ na Roça, etc.
@@ -25,20 +25,32 @@ CREATE TABLE polo(
     fim DATE NOT NULL,
     endereco VARCHAR(500),
     latitude DECIMAL(8,5),
-    longitude DECIMAL(8,5)
+    longitude DECIMAL(8,5),
+    ismultilocal BOOLEAN NOT NULL DEFAULT 0,
+
+    CONSTRAINT chk_endereco_required CHECK ( --Checa se o polo é multilocal ou não e exige os campos de endereço e coordenadas se não for
+        (ismultilocal = 0 AND endereco IS NOT NULL AND latitude IS NOT NULL AND longitude IS NOT NULL
+        ) OR (
+            ismultilocal = 1 AND endereco IS NULL AND latitude IS NULL AND longitude IS NULL
+        )
+    ),
+
+    CONSTRAINT chk_data CHECK (
+        fim > inicio
+    )
 );
 
 -- Tabela de exibições em determinado polo
 DROP TABLE IF EXISTS exibicao;
 CREATE TABLE exibicao(
     cod INT PRIMARY KEY AUTO_INCREMENT,
-    sequencia TINYINT UNSIGNED,
+    ordem TINYINT UNSIGNED,
     fkpolo INT NOT NULL,
     dia DATE NOT NULL,
     horario TIME NOT NULL,
-    endereco VARCHAR(500),
-    latitude DECIMAL(8,5),
-    longitude DECIMAL(8,5),
+    endereco VARCHAR(500) NOT NULL,
+    latitude DECIMAL(8,5) NOT NULL,
+    longitude DECIMAL(8,5) NOT NULL,
     FOREIGN KEY (fkpolo) REFERENCES polo(cod)
 );
 
@@ -46,11 +58,11 @@ CREATE TABLE exibicao(
 DROP TABLE IF EXISTS atracao;
 CREATE TABLE atracao(
     cod INT PRIMARY KEY AUTO_INCREMENT,
-    sequencia TINYINT UNSIGNED,
+    ordem TINYINT UNSIGNED,
     fkexibicao INT NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
-    principal BOOLEAN NOT NULL,
+    principal BOOLEAN NOT NULL DEFAULT 0,
     FOREIGN KEY (fkexibicao) REFERENCES exibicao(cod)
 );
 
@@ -69,20 +81,28 @@ CREATE TABLE locais(
     longitude DECIMAL(8,5) NOT NULL,
     urlimage TEXT NOT NULL,
     urlicone VARCHAR(255) NOT NULL
+
+    CONSTRAINT chk_data (
+        fim > inicio
+    )
 );
 
 -- Personalidades marcantes ou homenageados
 DROP TABLE IF EXISTS pessoa;
 CREATE TABLE pessoa(
-    cod INT PRIMARY KEY AUTI_INCREMENT,
+    cod INT PRIMARY KEY AUTO_INCREMENT,
     id VARCHAR(255) UNIQUE NOT NULL,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     obras VARCHAR(500) NOT NULL,
     nascido DATE NOT NULL,
     morte DATE,
-    ishomenageado BOOLEAN NOT NULL,
-    anohomenagem DATE
+    ishomenageado BOOLEAN NOT NULL DEFAULT 0,
+    anohomenagem DATE,
+    
+    CONSTRAINT chk_data (
+        morte > nascido
+    )
 );
 
 -- Tabela de tags (Cultural, Comercio, etc)
@@ -103,23 +123,13 @@ CREATE TABLE locaistags(
     FOREIGN KEY (fktag) REFERENCES tag(cod)
 );
 
--- Relacionamento n para n de Tags e Pessoas
-DROP TABLE IF EXISTS pessoatags;
-CREATE TABLE pessoatags(
-    fkpessoa INT,
-    fktag INT,
-    PRIMARY KEY (fkpessoa, fktag),
-    FOREIGN KEY (fkpessoa) REFERENCES pessoa(cod),
-    FOREIGN KEY (fktag) REFERENCES tag(cod)
-);
-
 -- Relacionamento n para n de Atrações e Tags
 DROP TABLE IF EXISTS atracaotags;
 CREATE TABLE atracaotags(
     fkatracao INT,
     fktag INT,
     PRIMARY KEY (fkatracao, fktag),
-    FOREIGN KEY (fkkatracao) REFERENCES atracao(cod),
+    FOREIGN KEY (fkatracao) REFERENCES atracao(cod),
     FOREIGN KEY (fktag) REFERENCES tag(cod)
 )
 
@@ -128,5 +138,5 @@ CREATE TABLE usuario(
     cod INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    isadmin BOOLEAN NOT NULL
+    isadmin BOOLEAN NOT NULL DEFAULT 0
 );
