@@ -95,10 +95,10 @@ CREATE TABLE pessoa(
     nome VARCHAR(255) NOT NULL,
     descricao TEXT NOT NULL,
     obras VARCHAR(500) NOT NULL,
-    nascido DATE NOT NULL,
-    morte DATE,
+    nascido INT NOT NULL,
+    morte INT,
     ishomenageado BOOLEAN NOT NULL DEFAULT 0,
-    anohomenagem DATE,
+    anohomenagem INT,
     
     CONSTRAINT chk_data (
         morte > nascido
