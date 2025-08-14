@@ -14,5 +14,5 @@ INSERT INTO tag(id, nome) VALUES ('mscrap', 'Rap');
 INSERT INTO tag(id, nome) VALUES ('msctrap', 'Trap');
 INSERT INTO tag(id, nome) VALUES ('mscinternacional', 'Internacional');
 INSERT INTO tag(id, nome) VALUES ('msceletronica', 'Eletronica');
-
-INSERT INTO tag(id, nome) VALUES ('typcultural', 'c')
+INSERT INTO tag(id, nome) VALUES ('mscpop', 'Pop');
+INSERT INTO tag(id, nome) VALUES ('mscrock', 'Rock');
