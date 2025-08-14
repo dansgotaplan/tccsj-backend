@@ -21,14 +21,15 @@ def evento():
   cursor = cnx.cursor()
   cursor.execute("SELECT * FROM evento")
   rows = cursor.fetchall()
+  cursor.close()
   for row in rows:
    results.append({
     'cod' : row[0],
     'id' : row[1],
     'nome' : row[2],
     'descricao' : row[3],
-    'dia': row [4],
-    'horario' : row[5],
+    'dia': str(row [4]),
+    'horario' : str(row[5]),
     'endereco' : row[6],
     'latitude' : row[7],
     'longitude' : row[8]
@@ -36,6 +37,6 @@ def evento():
   return make_response(jsonify(results))
  elif request.method == 'POST':
   return 'OK'
- 
+
 if __name__ == '__main__':
  app.run(host='0.0.0.0', port=5000, debug=True)
