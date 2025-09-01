@@ -140,3 +140,14 @@ CREATE TABLE usuario(
     senha VARCHAR(255) NOT NULL,
     isadmin BOOLEAN NOT NULL DEFAULT 0
 );
+
+DROP TABLE IF EXISTS equipe;
+CREATE TABLE equipe (
+	cod int primary key auto_increment,
+    nome varchar(255) not null,
+    funcao varchar(255) not null,
+    turma varchar(255) not null,
+    email varchar(255) not null,
+    ano year not null,
+    urlfoto varchar(255)
+);
